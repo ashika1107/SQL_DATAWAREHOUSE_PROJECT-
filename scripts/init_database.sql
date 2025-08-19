@@ -13,11 +13,30 @@ WARNING:
     and ensure you have proper backups before running this script.
 */
 
-DROP DATABASE IF EXISTS DataWarehouse_bronze;
-DROP DATABASE IF EXISTS DataWarehouse_silver;
-DROP DATABASE IF EXISTS DataWarehouse_gold;
+USE master;
+GO
 
-CREATE DATABASE DataWarehouse_bronze;
-CREATE DATABASE DataWarehouse_silver;
-CREATE DATABASE DataWarehouse_gold;
+-- Drop and recreate the 'DataWarehouse' database
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'DataWarehouse')
+BEGIN
+    ALTER DATABASE DataWarehouse SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE DataWarehouse;
+END;
+GO
 
+-- Create the 'DataWarehouse' database
+CREATE DATABASE DataWarehouse;
+GO
+
+USE DataWarehouse;
+GO
+
+-- Create Schemas
+CREATE SCHEMA bronze;
+GO
+
+CREATE SCHEMA silver;
+GO
+
+CREATE SCHEMA gold;
+GO
